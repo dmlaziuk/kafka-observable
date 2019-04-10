@@ -15,7 +15,6 @@
  * @module KafkaObservable
  * @author ghermeto
  **/
-'use strict';
 
 const Consumer = require('./lib/observables/consumer');
 const Producer = require('./lib/observables/producer');
@@ -33,52 +32,48 @@ const kafkaMessage = require('./lib/operators/kafka-message');
  * @see {@link https://github.com/oleksiyk/kafka/blob/master/README.md} for default client options.
  */
 function KafkaObservable(options, clientFactory) {
+  /**
+   * Object capable of creating both the consumer and producer observables
+   * @inner
+   * @name ObservableFactory
+   * @typedef {Object} ObservableFactory
+   * @property {Function} fromTopic same as fromTopic from prototype
+   * @property {Function} toTopic same as toTopic from prototype
+   */
+  return {
     /**
-     * Object capable of creating both the consumer and producer observables
-     * @inner
-     * @name ObservableFactory
-     * @typedef {Object} ObservableFactory
-     * @property {Function} fromTopic same as fromTopic from prototype
-     * @property {Function} toTopic same as toTopic from prototype
+     * Creates a Consumer observable
+     * @param {string} topic topic to subscribe
+     * @param {Object} opts kafka client options
+     * @param {Object} client kafka adapter
+     * @returns {Observable}
+     * @see {@link observables/Consumer}
      */
-    return {
-        /**
-         * Creates a Consumer observable
-         * @param {string} topic topic to subscribe
-         * @param {Object} opts kafka client options
-         * @param {Object} client kafka adapter
-         * @returns {Observable}
-         * @see {@link observables/Consumer}
-         */
-        fromTopic:
-            (topic, opts = options, client = clientFactory) =>
-                Consumer.create(topic, opts, client),
-        /**
-         * Creates a Producer observable
-         * @param {string} topic topic to subscribe
-         * @param {Array|Observable} messages message(s) to be sent
-         * @param {Object} opts kafka client options
-         * @param {Object} client kafka adapter
-         * @returns {Observable}
-         * @see {@link observables/Producer}
-         */
-        toTopic:
-            (topic, messages, opts = options, client = clientFactory) =>
-                Producer.create(topic, messages, opts, client),
+    fromTopic: (topic, opts = options, client = clientFactory) => Consumer.create(topic, opts, client),
+    /**
+     * Creates a Producer observable
+     * @param {string} topic topic to subscribe
+     * @param {Array|Observable} messages message(s) to be sent
+     * @param {Object} opts kafka client options
+     * @param {Object} client kafka adapter
+     * @returns {Observable}
+     * @see {@link observables/Producer}
+     */
+    toTopic: (topic, messages, opts = options, client = clientFactory) => Producer.create(topic, messages, opts, client),
 
-        /**
-         * Operator: formats a message as a JSON object
-         * @function
-         * @param {Function} mapper mapping function
-         */
-        JSONMessage: jsonMessage,
-        /**
-         * Operator: formats a message as a text message
-         * @function
-         * @param {Function} mapper mapping function
-         */
-        TextMessage: kafkaMessage
-    }
+    /**
+     * Operator: formats a message as a JSON object
+     * @function
+     * @param {Function} mapper mapping function
+     */
+    JSONMessage: jsonMessage,
+    /**
+     * Operator: formats a message as a text message
+     * @function
+     * @param {Function} mapper mapping function
+     */
+    TextMessage: kafkaMessage
+  }
 }
 
 // observables

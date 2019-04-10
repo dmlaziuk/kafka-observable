@@ -1,0 +1,19 @@
+{
+    "extends": "airbnb-base",
+    "rules": {
+        "array-callback-return": "off",
+        "arrow-parens": "off",
+        "class-methods-use-this": "off",
+        "comma-dangle": "off",
+        "consistent-return": "off",
+        "func-names": "off",
+        "implicit-arrow-linebreak": "off",
+        "indent": ["error" , 2],
+        "max-len": "off",
+        "no-confusing-arrow": "off",
+        "no-underscore-dangle": "off",
+        "object-curly-newline": "off",
+        "semi": "off",
+        "spaced-comment": ["error", "always"]
+    }
+}
